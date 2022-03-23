@@ -26,6 +26,7 @@
     "SOCKETS_ENABLE": true
   },
   "rules": {
+    "default-param-last": "off",
     "react/no-unstable-nested-components": [
       "warn",
       { "allowAsProps": true }

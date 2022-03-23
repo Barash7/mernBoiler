@@ -4,6 +4,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import favicon from 'serve-favicon'
 import io from 'socket.io'
+import axios from 'axios'
+import { readFile } from 'fs/promises'
 
 import config from './config'
 import mongooseService from './services/mongoose'
@@ -29,6 +31,26 @@ middleware.forEach((it) => server.use(it))
 
 server.get('/', (req, res) => {
   res.send('Express Server')
+})
+
+server.get('/api/v1/products', async (req, res) => {
+  const arrayOfProducts = await readFile(`${__dirname}/data/data.json`, 'utf-8')
+    .then((data) => JSON.parse(data))
+    .catch(() => [])
+  res.json(arrayOfProducts.slice(0, 50))
+})
+
+const url = 'https://api.exchangerate.host/latest?base=USD&symbols=USD,EUR,CAD'
+const mockRates = {
+  CAD: 1.3,
+  EUR: 0.9,
+  USD: 1
+}
+server.get('/api/v1/currency', async (req, res) => {
+  const currency = await axios(url)
+    .then(({ data }) => data.rates)
+    .catch(() => mockRates)
+  res.json(currency)
 })
 
 // MongoDB

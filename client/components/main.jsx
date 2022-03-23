@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Head from './head'
+import Header from './header'
+import Products from './products'
+import { getRates } from '../redux/reducers/settings'
 
 const Main = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getRates())
+  }, [])
   return (
-    <div className="flex justify-center p-4 bg-slate-300">
+    <div className="flex flex-col">
       <Head title="Main" />
-      <div className="flex font-semibold text-slate-800">MERN Boilerplate</div>
+      <Header caption="Igoris shop" />
+      <Products />
     </div>
   )
 }
 
-export default Main
+export default React.memo(Main)
