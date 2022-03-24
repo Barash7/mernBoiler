@@ -9,21 +9,21 @@ const ProductCard = ({ product }) => {
   const { list } = useSelector((store) => store.cart)
 
   return (
-    <div className="flex flex-col border rounded-md mt-2 p-2 w-40" title={product.description}>
-      <div className="font-semiboil"><p className="truncate"> {product.title} </p>
+    <div className="flex flex-col border rounded-md m-1 p-2 w-40" title={product.description}>
+      <div className="font-semiboil"><p className="card__title truncate"> {product.title} </p>
       </div>
       <div>
-        <img className="object-cover h-40 w-full" src={product.image} alt={product.title} />
+        <img className="card__image object-cover h-40 w-full" src={product.image} alt={product.title} />
       </div>
       <div>
         Price:
-        <span>
+        <span className="card__price">
           {(product.price * rates[currencyName]).toFixed(2)} {currencyName}
         </span>
       </div>
       <div>
         <button type="button" className="border rounded-md p-1" onClick={() => dispatch(addItem(product.id))}>Add</button>
-        <span className="ml-2">{ list[product.id]?.amount }</span>
+        <span className="card__product-amount ml-2">{ list[product.id]?.amount }</span>
       </div>
     </div>
   )

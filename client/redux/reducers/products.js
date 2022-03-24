@@ -1,7 +1,7 @@
 const GET_PRODUCTS = '@products/GET_PRODUCTS'
 
 const initialState = {
-  list: []
+  list: {}
 }
 
 export default function (state = initialState, action) {
@@ -21,6 +21,10 @@ export const getProductsFromServer = () => {
   return (dispatch) => {
     fetch('/api/v1/products')
       .then((data) => data.json())
+      .then((array) => array.reduce((acc, rec) => {
+        acc[rec.id] = rec
+        return acc
+      }, {}))
       .then((product) => dispatch({ type: GET_PRODUCTS, payload: product }))
       .catch((err) => console.log(err))
   }
