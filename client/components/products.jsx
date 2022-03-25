@@ -6,13 +6,16 @@ import ProductCard from './product-card'
 
 const Products = () => {
   const productList = useSelector((s) => s.products.list)
+  const { loaded } = useSelector((s) => s.settings)
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getProductsFromServer())
+    if (!loaded) {
+      dispatch(getProductsFromServer())
+    }
   }, [])
   return (
     <div className="flex flex-wrap space-x-2 m-2">
-      { Object.values(productList).map((prod) => (
+      {Object.values(productList).map((prod) => (
         <ProductCard key={prod.id} product={prod} />
       ))}
     </div>

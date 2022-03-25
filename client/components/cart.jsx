@@ -13,7 +13,7 @@ const Cart = () => {
     <div className="flex flex-col">
       <Head title="Cart" />
       <Header caption="Igoris shop" />
-      <Table data={Object.keys(prodInCart)} />
+      <Table data={Object.values(prodInCart)} />
       { /* <div>
         {Object.keys(prodInCart).map((it) => {
           return (

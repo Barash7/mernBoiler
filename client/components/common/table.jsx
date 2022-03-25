@@ -1,22 +1,50 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import TableRow from './table-row'
 
 const Table = ({ data }) => {
+  const { sort, sortType } = useSelector((s) => s.settings)
+  const sortProductsList = (arrayOfProducts, type, direction) => {
+    switch (type) {
+      case 'name': {
+        arrayOfProducts.sort((a, b) => {
+          if (direction) {
+            return a.title.localeCompare(b.title)
+          }
+          return b.title.localeCompare(a.title)
+        })
+      }
+      /* falls through */
+      case 'price': {
+        arrayOfProducts.sort((a, b) => {
+          if (direction) {
+            return a.price - b.price
+          }
+          return b.price - a.price
+        })
+      }
+      /* falls through */
+      default:
+        return arrayOfProducts
+    }
+  }
   return (
     <table>
       <thead>
-        <th>#</th>
-        <th>Image</th>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Amount</th>
-        <th>Total</th>
-        <th>Remove</th>
+        <tr>
+          <th>#</th>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Amount</th>
+          <th>Total</th>
+          <th>Remove</th>
+        </tr>
       </thead>
       <tbody>
-        {data.map((id, index) => (
-          <TableRow key={id} id={id} n={index + 1} />
+        {sortProductsList(data, sortType, sort[sortType]).map((prod, index) => (
+          <TableRow key={prod.id} id={prod.id} n={index + 1} />
         ))}
       </tbody>
     </table>
