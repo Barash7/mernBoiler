@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
         </span>
       </div>
       <div>
-        <button type="button" className="border rounded-md p-1" onClick={() => dispatch(addItem(product.id))}>Add</button>
+        <button type="button" className="border rounded-md p-1" onClick={() => dispatch(addItem(product.id))}>Buy</button>
         <span className="card__product-amount ml-2">{ list[product.id]?.amount }</span>
       </div>
     </div>

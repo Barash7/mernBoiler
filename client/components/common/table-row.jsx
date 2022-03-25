@@ -1,20 +1,21 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { changeItemAmount } from '../../redux/reducers/cart'
+import { changeItemAmount, removeCurrentItem } from '../../redux/reducers/cart'
 
-const TableRow = ({ id }) => {
+const TableRow = ({ id, n }) => {
+  const dispatch = useDispatch()
   const product = useSelector((store) => store.products.list)
   const prodInCart = useSelector((s) => s.cart.list)
-  const dispatch = useDispatch()
+  const { rates, currencyName } = useSelector((store) => store.settings)
   return (
     <tr>
-      <td>#</td>
+      <td>{n}</td>
       <td className="product__image w-4">
         <img src={product[id].image} alt={product[id].title} />
       </td>
       <td className="product__title">{product[id].title}</td>
-      <td className="product__price">{product[id].price}</td>
+      <td className="product__price">{(product[id].price * rates[currencyName]).toFixed(2)} {currencyName}</td>
       <td className="product__amount">
         <div className="custom-number-input h-10 w-32">
           <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
@@ -43,9 +44,13 @@ const TableRow = ({ id }) => {
         </div>
         {prodInCart[id].amount}
       </td>
-      <td className="product__product__total__price">{prodInCart[id]?.totalPrice}</td>
+      <td className="product__product__total__price">{(product[id].price * rates[currencyName] * prodInCart[id].amount).toFixed(2)} {currencyName}</td>
       <td>
-        <button type="button" className="border rounded p-2">
+        <button
+          type="button"
+          className="border rounded p-2"
+          onClick={() => dispatch(removeCurrentItem(id))}
+        >
           Remove
         </button>
       </td>

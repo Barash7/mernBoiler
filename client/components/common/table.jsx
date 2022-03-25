@@ -15,8 +15,8 @@ const Table = ({ data }) => {
         <th>Remove</th>
       </thead>
       <tbody>
-        {data.map((id) => (
-          <TableRow key={id} id={id} />
+        {data.map((id, index) => (
+          <TableRow key={id} id={id} n={index + 1} />
         ))}
       </tbody>
     </table>

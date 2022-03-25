@@ -8,7 +8,7 @@ const initialState = {
   currencyName: 'USD'
 }
 
-export default function (state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
     case GET_RATES: {
       return {

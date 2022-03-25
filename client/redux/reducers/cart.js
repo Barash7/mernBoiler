@@ -2,6 +2,7 @@ const ADD_ITEM = '@card/ADD_ITEM'
 const INCREASE_AMOUNT = '@cart/CHANGE_AMOUNT'
 const DECREASE_AMOUNT = '@cart/DECREASE_AMOUNT'
 const REMOVE_ITEM = '@cart/REMOVE_ITEM'
+const TOTAL_VALUES = '@cart/TOTAL_VALUES'
 
 const initialState = {
   list: {},
@@ -36,6 +37,13 @@ export default (state = initialState, action) => {
         list: action.payload
       }
     }
+    case TOTAL_VALUES: {
+      return {
+        ...state,
+        totalPrice: action.payload.totalPrice,
+        totalAmount: action.payload.totalAmount
+      }
+    }
     default:
       return state
   }
@@ -62,7 +70,8 @@ export const addItem = (id) => {
 
 export const changeItemAmount = (id, count) => {
   return (dispatch, getState) => {
-    const { list } = getState().cart
+    const { list, totalAmount, totalPrice } = getState().cart
+    const { price } = getState().products.list[id]
     const { amount } = list[id]
     const newAmount = amount + count
     if (count > 0) {
@@ -88,5 +97,32 @@ export const changeItemAmount = (id, count) => {
         payload: list
       })
     }
+    dispatch({
+      type: TOTAL_VALUES,
+      payload: {
+        totalPrice: totalPrice + price * count,
+        totalAmount: totalAmount + count
+      }
+    })
+  }
+}
+
+export const removeCurrentItem = (id) => {
+  return (dispatch, getState) => {
+    const { list, totalAmount, totalPrice } = getState().cart
+    const { price } = getState().products.list[id]
+    const removedProductAmount = list[id].amount
+    delete list[id]
+    dispatch({
+      type: REMOVE_ITEM,
+      payload: list
+    })
+    dispatch({
+      type: TOTAL_VALUES,
+      payload: {
+        totalPrice: totalPrice - price * removedProductAmount,
+        totalAmount: totalAmount - removedProductAmount
+      }
+    })
   }
 }
